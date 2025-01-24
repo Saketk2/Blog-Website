@@ -15,6 +15,9 @@ def dashboard(request):
     blog = BlogPost.objects.all()
     return render(request, 'dashboard.html', {'blog': blog, 'form': form})
 
+def upload_post(request):
+    # Page to create and uplaod posts
+
 def edit_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
     if request.method == "POST":
