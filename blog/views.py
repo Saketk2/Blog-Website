@@ -13,11 +13,19 @@ def dashboard(request):
     else:
         form = BlogPostForm()
     blog = BlogPost.objects.all()
-    return render(request, 'dashboard.html', {'blog': blog, 'form': form})
+    return render(request, 'dashboard.html', {'blogs': blog, 'form': form})
 
 def upload_post(request):
-    # Page to create and uplaod posts
-
+    if request.method == "POST":
+        form = BlogPostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = BlogPostForm()
+    
+    return render(request, 'upload_post.html', {'form': form}) 
+    
 def edit_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
     if request.method == "POST":
@@ -28,12 +36,25 @@ def edit_post(request, post_id):
     else:
         form = BlogPostForm(instance=post)
 
-    return render(request, 'edit_task.html', {'form': form, 'post': post})
+    return render(request, 'edit_post.html', {'form': form, 'post': post})
 
 def delete_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
     post.delete()
     return redirect('dashboard')
+
+def like_post(request, post_id):
+    post = get_object_or_404(BlogPost, id = post_id)
+    post.likes += 1
+    post.save()
+    return redirect('dashboard')
+
+def dislike_post(request, post_id):
+    post = get_object_or_404(BlogPost, id = post_id)
+    post.dislikes += 1
+    post.save()
+    return redirect('dashboard')
+
 
 
 

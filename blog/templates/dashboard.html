@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 <head>
     <title>Dashboard</title>
     {%load static%}
@@ -6,5 +7,29 @@
 
 <body>
     <h1> Blog Posts </h1>
-    
+    <ul>
+        {%for blog in blogs%}
+        <li>
+            <h5>Author</h5> {{blog.author}} <br>
+            <h5>Post</h5> {{blog.content}} <br>
+            <h5>Likes</h5> {{blog.likes}} <br>
+            <h5>Dislikes</h5> {{blog.dislikes}} <br>
+            <h5>Date Posted</h5> {{blog.created}} <br>
+
+            <form action = "{% url 'like_post', blog.id%}" method = "POST">
+                {% csrf_token %}
+                <button type="submit">Like</button>
+            </form>
+
+            <form action = "{% url 'dislike_post', blog.id%}" method = "POST">
+                {% csrf_token %}
+                <button type="submit">Dislike</button>
+            </form>
+
+            <a href = "{%url 'edit_post', blog.id%}">Edit Post</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href = {%url 'upload_post'%}>Upload a Post</a>
 </body>
+</html>
