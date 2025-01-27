@@ -12,8 +12,8 @@ def dashboard(request):
             return redirect('dashboard')
     else:
         form = BlogPostForm()
-    blog = BlogPost.objects.all()
-    return render(request, 'dashboard.html', {'blogs': blog, 'form': form})
+    blogs = BlogPost.objects.all()
+    return render(request, 'dashboard.html', {'blogs': blogs, 'form': form})
 
 def upload_post(request):
     if request.method == "POST":
