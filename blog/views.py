@@ -1,5 +1,6 @@
 from django.shortcuts import render ,get_object_or_404, redirect
-from .models import BlogPost
+from django.contrib.auth.forms import UserCreationForm
+from .models import BlogPost, LikeDislike
 from .forms import BlogPostForm
 
 # Create your views here.
@@ -19,7 +20,9 @@ def upload_post(request):
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return redirect('dashboard')
     else:
         form = BlogPostForm()
@@ -28,6 +31,8 @@ def upload_post(request):
     
 def edit_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
+    if post.author != request.user:
+        return redirect('dashboard')
     if request.method == "POST":
         form = BlogPostForm(request.POST, instance = post)
         if form.is_valid():
@@ -45,16 +50,44 @@ def delete_post(request, post_id):
 
 def like_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
-    post.likes += 1
-    post.save()
+    like_dislike, created = LikeDislike.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        like_dislike.is_like = True
+        post.save()
     return redirect('dashboard')
 
 def dislike_post(request, post_id):
     post = get_object_or_404(BlogPost, id = post_id)
-    post.dislikes += 1
-    post.save()
+    like_dislike, created = LikeDislike.objects.get_or_create(user=request.user, post=post)
+    if not created:
+        like_dislike.is_like = False
+        post.save()
     return redirect('dashboard')
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'signup.html', {'form': form})
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('login')
+    else:
+        form = UserCreationForm()
+    
+    return render(request, 'signup.html', {'form': form})
+
+def my_posts(request):
+    posts = BlogPost.objects.filter(author=request.user)
+    return render(request, 'my_posts.html', {'posts': posts})
 
 

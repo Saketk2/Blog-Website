@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Posts</title>
+    </head>
+
+    <body>
+        <h1>My Posts</h1>
+        <ul>
+            {%for blog in posts%}
+            <li>
+                <h5>Author</h5> {{blog.author}} <br>
+                <h5>Post</h5> {{blog.content}} <br>
+                <h5>Likes</h5> {{blog.likes}} <br>
+                <h5>Dislikes</h5> {{blog.dislikes}} <br>
+                <h5>Date Posted</h5> {{blog.created}} <br>
+    
+                <a href = "{%url 'edit_post' blog.id%}">Edit Post</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
