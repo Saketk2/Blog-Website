@@ -14,5 +14,5 @@ class BlogPost(models.Model):
 
 class LikeDislike(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
-    post = models.ForeignKey(BlogPost, on_delete = models.CASCADE)
-    is_like = models.BooleanField()
+    post = models.ForeignKey(BlogPost, on_delete = models.CASCADE, related_name="likes_dislikes")
+    is_like = models.BooleanField(null=False, default=True)

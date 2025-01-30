@@ -1,11 +1,13 @@
 from django.shortcuts import render ,get_object_or_404, redirect
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth import login as auth_login
 from .models import BlogPost, LikeDislike
 from .forms import BlogPostForm
 
 # Create your views here.
 # forms -> views -> templates -> urls
 def dashboard(request):
+    
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
@@ -49,19 +51,45 @@ def delete_post(request, post_id):
     return redirect('dashboard')
 
 def like_post(request, post_id):
-    post = get_object_or_404(BlogPost, id = post_id)
+    post = get_object_or_404(BlogPost, id=post_id)
     like_dislike, created = LikeDislike.objects.get_or_create(user=request.user, post=post)
+    
     if not created:
+        if like_dislike.is_like:
+            post.likes -= 1 if post.likes > 0 else 0
+            like_dislike.delete()
+        else:
+            post.dislikes -= 1
+            post.likes += 1
+            like_dislike.is_like = True
+            like_dislike.save()
+    else:
+        post.likes += 1
         like_dislike.is_like = True
-        post.save()
+        like_dislike.save()
+    
+    post.save()
     return redirect('dashboard')
 
 def dislike_post(request, post_id):
-    post = get_object_or_404(BlogPost, id = post_id)
+    post = get_object_or_404(BlogPost, id=post_id)
     like_dislike, created = LikeDislike.objects.get_or_create(user=request.user, post=post)
+    
     if not created:
+        if not like_dislike.is_like:
+            post.dislikes -= 1 if post.dislikes > 0 else 0
+            like_dislike.delete()
+        else:
+            post.likes -= 1
+            post.dislikes += 1
+            like_dislike.is_like = False
+            like_dislike.save()
+    else:
+        post.dislikes += 1
         like_dislike.is_like = False
-        post.save()
+        like_dislike.save()
+    
+    post.save()
     return redirect('dashboard')
 
 def signup(request):
@@ -75,19 +103,25 @@ def signup(request):
     
     return render(request, 'signup.html', {'form': form})
 
-def signup(request):
+def login(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = AuthenticationForm(request, data = request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.get_user()
+            auth_login(request, user)
+            return redirect('dashboard')
     else:
-        form = UserCreationForm()
+        form = AuthenticationForm()
     
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'login.html', {'form': form})
 
 def my_posts(request):
     posts = BlogPost.objects.filter(author=request.user)
     return render(request, 'my_posts.html', {'posts': posts})
 
+
+# Make a new superuser
+# test with multiple accounts
+# Add a delete post button + view
+# Add CSS styles
 

@@ -12,25 +12,25 @@
         <li>
             <h5>Author</h5> {{blog.author}} <br>
             <h5>Post</h5> {{blog.content}} <br>
-            <h5>Likes</h5> {{blog.likes}} <br>
-            <h5>Dislikes</h5> {{blog.dislikes}} <br>
+            <p>Likes: {{ blog.likes }}</p>
+            <p>Dislikes: {{ blog.dislikes }}</p>
             <h5>Date Posted</h5> {{blog.created}} <br>
 
-            <form action = "{% url 'like_post' blog.id%}" method = "POST">
+            <form action="{% url 'like_post' blog.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit">Like</button>
             </form>
 
-            <form action = "{% url 'dislike_post' blog.id%}" method = "POST">
+            <form action="{% url 'dislike_post' blog.id %}" method="POST">
                 {% csrf_token %}
                 <button type="submit">Dislike</button>
             </form>
 
-            <a href = "{%url 'edit_post' blog.id%}">Edit Post</a>
+            <a href="{% url 'edit_post' blog.id %}">Edit Post</a>
         </li>
         {% endfor %}
     </ul>
-    <a href = {%url 'upload_post'%}>Upload a Post</a>
-    <a href = {%url 'my_posts'%}>View my Posts</a>
+    <a href="{% url 'upload_post' %}">Upload a Post</a>
+    <a href="{% url 'my_posts' %}">View my Posts</a>
 </body>
 </html>
