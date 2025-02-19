@@ -7,7 +7,6 @@ from .forms import BlogPostForm
 # Create your views here.
 # forms -> views -> templates -> urls
 def dashboard(request):
-    
     if request.method == "POST":
         form = BlogPostForm(request.POST)
         if form.is_valid():
@@ -121,8 +120,6 @@ def my_posts(request):
 
 
 # Make a new superuser
-# test with multiple accounts
 # Add a delete post button + view
 # Figure out solution to prevent refreshing
-# Add CSS styles
 

@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title> Log in</title>
-    </head>
-    <body>
-        <h1>Log in</h1>
-        <form method = "POST">
+<head>
+    <title>Log In</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/login.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Log In</h1>
+
+        <form method="POST" class="login-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type = 'submit'>Log in</button>
+            <button type="submit" class="login-btn">Log In</button>
         </form>
-    </body>
+    </div>
+</body>
 </html>

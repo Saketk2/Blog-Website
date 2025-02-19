@@ -1,14 +1,19 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Sign Up</title>
-    </head>
-    <body>
-        <h1>Sign up</h1>
-        <form method = "POST">
+<head>
+    <title>Sign Up</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/signup.css' %}">
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="title">Sign Up</h1>
+        <form method="POST" class="signup-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <button type = 'submit'>Sign up</button>
+            <button type="submit" class="signup-btn">Sign Up</button>
         </form>
-    </body>
+    </div>
+</body>
 </html>

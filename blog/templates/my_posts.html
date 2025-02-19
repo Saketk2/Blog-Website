@@ -1,23 +1,37 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>My Posts</title>
-    </head>
+<head>
+    <title>My Posts</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/my_posts.css' %}">
+</head>
 
-    <body>
-        <h1>My Posts</h1>
-        <ul>
-            {%for blog in posts%}
-            <li>
-                <h5>Author</h5> {{blog.author}} <br>
-                <h5>Post</h5> {{blog.content}} <br>
-                <h5>Likes</h5> {{blog.likes}} <br>
-                <h5>Dislikes</h5> {{blog.dislikes}} <br>
-                <h5>Date Posted</h5> {{blog.created}} <br>
-    
-                <a href = "{%url 'edit_post' blog.id%}">Edit Post</a>
+<body>
+    <div class="container">
+        <h1 class="title">My Posts</h1>
+        <ul class="post-list">
+            {% for blog in posts %}
+            <li class="post-item">
+                <h5 class="post-label">Author</h5> 
+                <p class="post-text">{{ blog.author }}</p>
+
+                <h5 class="post-label">Post</h5> 
+                <p class="post-text">{{ blog.content }}</p>
+
+                <h5 class="post-label">Likes</h5> 
+                <p class="post-text">{{ blog.likes }}</p>
+
+                <h5 class="post-label">Dislikes</h5> 
+                <p class="post-text">{{ blog.dislikes }}</p>
+
+                <h5 class="post-label">Date Posted</h5> 
+                <p class="post-text">{{ blog.created }}</p>
+
+                <a href="{% url 'edit_post' blog.id %}" class="edit-link">Edit Post</a>
             </li>
             {% endfor %}
+            <a href="{% url 'dashboard' %}" class="back-btn">Back</a>
         </ul>
-    </body>
+    </div>
+</body>
 </html>

@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Upload Post</title>
-        {% load static %}
-    </head>
-    <body>
-        <h1>Upload Post</h1>
+<head>
+    <title>Upload Post</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/upload_post.css' %}">
+</head>
 
-        <form method = "POST">
-            {%csrf_token%}
+<body>
+    <div class="container">
+        <h1 class="title">Upload Post</h1>
+
+        <form method="POST" class="upload-form">
+            {% csrf_token %}
             {{ form.as_p }}
-            <button type = "submit">Upload</button>
+            <button type="submit" class="upload-btn">Upload</button>
         </form>
-    </body>
+    </div>
+</body>
 </html>

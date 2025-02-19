@@ -2,35 +2,50 @@
 <html>
 <head>
     <title>Dashboard</title>
-    {%load static%}
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/dashboard.css' %}">
 </head>
 
 <body>
-    <h1> Blog Posts </h1>
-    <ul>
-        {%for blog in blogs%}
-        <li>
-            <h5>Author</h5> {{blog.author}} <br>
-            <h5>Post</h5> {{blog.content}} <br>
-            <p>Likes: {{ blog.likes }}</p>
-            <p>Dislikes: {{ blog.dislikes }}</p>
-            <h5>Date Posted</h5> {{blog.created}} <br>
+    <div class="container">
+        <h1 class="title">Blog Posts</h1>
+        <ul class="blog-list">
+            {% for blog in blogs %}
+            <li class="blog-card">
+                <h5 class="blog-author">Author</h5> 
+                <p class="author-name">{{ blog.author }}</p>
 
-            <form action="{% url 'like_post' blog.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">Like</button>
-            </form>
+                <h5 class="blog-content">Post</h5> 
+                <p class="post-text">{{ blog.content }}</p>
 
-            <form action="{% url 'dislike_post' blog.id %}" method="POST">
-                {% csrf_token %}
-                <button type="submit">Dislike</button>
-            </form>
+                <p class="likes">Likes: {{ blog.likes }}</p>
+                <p class="dislikes">Dislikes: {{ blog.dislikes }}</p>
 
-            <a href="{% url 'edit_post' blog.id %}">Edit Post</a>
-        </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'upload_post' %}">Upload a Post</a>
-    <a href="{% url 'my_posts' %}">View my Posts</a>
+                <h5 class="date-posted">Date Posted</h5> 
+                <p class="date">{{ blog.created }}</p>
+
+                <form action="{% url 'like_post' blog.id %}" method="POST" class="like-form">
+                    {% csrf_token %}
+                    <button type="submit" class="like-btn">Like</button>
+                </form>
+
+                <form action="{% url 'dislike_post' blog.id %}" method="POST" class="dislike-form">
+                    {% csrf_token %}
+                    <button type="submit" class="dislike-btn">Dislike</button>
+                </form>
+
+                {% if blog.author == request.user %}
+                    <a href="{% url 'edit_post' blog.id %}" class="edit-link">Edit Post</a>
+                {% endif %}
+
+            </li>
+            {% endfor %}
+        </ul>
+
+        <div class="actions">
+            <a href="{% url 'upload_post' %}" class="action-link">Upload a Post</a>
+            <a href="{% url 'my_posts' %}" class="action-link">View my Posts</a>
+        </div>
+    </div>
 </body>
 </html>

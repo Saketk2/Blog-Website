@@ -1,18 +1,22 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Edit Task</title>
-        {% load static %}
-    </head>
+<head>
+    <title>Edit Task</title>
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static '../static/edit_post.css' %}">
+</head>
 
-    <body>
-        <h1>Edit Post</h1>
-        <p>{{blog.content}}</p>
+<body>
+    <div class="container">
+        <h1 class="title">Edit Post</h1>
+        <p class="post-text">{{ blog.content }}</p>
 
-        <form method = "POST">
-            {%csrf_token%}
+        <form method="POST" class="edit-form">
+            {% csrf_token %}
             {{ form.as_p }}
-            <button type = "submit">Save Changes</button>
+            <button type="submit" class="save-btn">Save Changes</button>
+            <a href="{% url 'dashboard' %}" class="save-btn">Back</a>
         </form>
-    </body>
+    </div>
+</body>
 </html>
